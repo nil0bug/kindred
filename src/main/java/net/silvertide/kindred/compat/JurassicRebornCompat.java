@@ -1,0 +1,37 @@
+package net.silvertide.kindred.compat;
+
+import net.minecraft.world.entity.Entity;
+import net.silvertide.kindred.bond.CompanionAdapter;
+import net.vit.jurassicreborn.common.entities.DinosaurEntity;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public final class JurassicRebornCompat {
+    public static final String MODID = "jurassicreborn";
+
+    public static CompanionAdapter adapter() {
+        return new DinosaurAdapter();
+    }
+
+    private static final class DinosaurAdapter implements CompanionAdapter {
+        @Override
+        public boolean handles(Entity entity) {
+            return entity instanceof DinosaurEntity;
+        }
+
+        @Override
+        public Optional<UUID> ownerOf(Entity entity) {
+            return Optional.ofNullable(((DinosaurEntity) entity).getOwner());
+        }
+
+        @Override
+        public void wake(Entity entity) {
+            DinosaurEntity dinosaur = (DinosaurEntity) entity;
+            dinosaur.disturbSleep();
+            dinosaur.setFieldOrder(DinosaurEntity.Order.FOLLOW);
+        }
+    }
+
+    private JurassicRebornCompat() {}
+}
