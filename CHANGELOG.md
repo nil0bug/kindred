@@ -1,3 +1,3 @@
-## 1.1.1
+## 1.2.0
 ---
-- Config for initial bonds can now be set to 0 if you don't want anyone to start out with bonds.
+- Add compatability for Jurassic Reborn, Petting - tame any mob, and 

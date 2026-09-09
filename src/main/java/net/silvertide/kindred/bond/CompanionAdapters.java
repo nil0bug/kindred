@@ -4,6 +4,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.TamableAnimal;
 import net.neoforged.fml.ModList;
+import net.silvertide.kindred.compat.FamiliarsLibCompat;
 import net.silvertide.kindred.compat.JurassicRebornCompat;
 import net.silvertide.kindred.compat.PettingCompat;
 
@@ -20,6 +21,7 @@ public final class CompanionAdapters {
         adapters.add(new VanillaOwnableAdapter());
         if (ModList.get().isLoaded(JurassicRebornCompat.MODID)) adapters.add(JurassicRebornCompat.adapter());
         if (ModList.get().isLoaded(PettingCompat.MODID)) adapters.add(new PettingCompat());
+        if (ModList.get().isLoaded(FamiliarsLibCompat.MODID)) adapters.add(FamiliarsLibCompat.adapter());
         return List.copyOf(adapters);
     }
 

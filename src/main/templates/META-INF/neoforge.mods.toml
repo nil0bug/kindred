@@ -108,3 +108,10 @@ A full-featured pet bonding and summoning mod.  Call your pets from anywhere, ev
     versionRange="[4.2.2,)"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="familiarslib"
+    type="optional"
+    versionRange="[1.0.0,)"
+    ordering="NONE"
+    side="BOTH"

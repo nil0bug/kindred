@@ -126,15 +126,19 @@ dependencies {
     compileOnly "curse.maven:petting-1083170:${petting_version}"
     localRuntime "curse.maven:petting-1083170:${petting_version}"
 
-    compileOnly "curse.maven:petting-1083170:${petting_version}"
-    localRuntime "curse.maven:petting-1083170:${petting_version}"
+    compileOnly "curse.maven:irons-spells-n-spellbooks-855414:${iss_version}"
+
+    compileOnly "curse.maven:familiarslib-1316458:${familiarslib_version}"
 
     compileOnly "curse.maven:jurassic-reborn-359537:${jurassic_reborn_version}"
     localRuntime "curse.maven:jurassic-reborn-359537:${jurassic_reborn_version}"
+
     compileOnly "curse.maven:citadel-331936:${citadel_version}"
     localRuntime "curse.maven:citadel-331936:${citadel_version}"
+
     compileOnly "curse.maven:geckolib-388172:${geckolib_version}"
     localRuntime "curse.maven:geckolib-388172:${geckolib_version}"
+
     compileOnly "curse.maven:jei-238222:${jei_version}"
     localRuntime "curse.maven:jei-238222:${jei_version}"
 }
