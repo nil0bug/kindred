@@ -7,12 +7,12 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Saddleable;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.silvertide.kindred.bond.CompanionAdapters;
 import net.silvertide.kindred.network.Networking;
 import net.silvertide.kindred.client.data.ClientRosterData;
 import net.silvertide.kindred.config.Config;
@@ -189,7 +189,7 @@ public final class BindFooter {
     }
 
     private static boolean passesClientGates(Entity entity) {
-        if (!(entity instanceof OwnableEntity)) return false;
+        if (!CompanionAdapters.isOwnable(entity)) return false;
         if (Config.REQUIRE_SADDLEABLE.get() && !(entity instanceof Saddleable)) return false;
         return true;
     }

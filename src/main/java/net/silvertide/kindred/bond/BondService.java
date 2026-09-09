@@ -14,9 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.Saddleable;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.PortalInfo;
@@ -50,8 +48,9 @@ public final class BondService {
     }
 
     public static ClaimResult checkClaimEligibility(ServerPlayer player, Entity target) {
-        if (!(target instanceof OwnableEntity owned)) return ClaimResult.NOT_OWNABLE;
-        if (!player.getUUID().equals(owned.getOwnerUUID())) return ClaimResult.NOT_OWNED_BY_PLAYER;
+        Optional<CompanionAdapter> adapter = CompanionAdapters.adapterFor(target);
+        if (adapter.isEmpty()) return ClaimResult.NOT_OWNABLE;
+        if (!adapter.get().ownerOf(target).map(player.getUUID()::equals).orElse(false)) return ClaimResult.NOT_OWNED_BY_PLAYER;
 
         var entityTypeTags = ForgeRegistries.ENTITY_TYPES.tags();
         boolean allowlistActive = !entityTypeTags.getTag(ModTags.BOND_ALLOWLIST).isEmpty();
@@ -255,7 +254,7 @@ public final class BondService {
                 double walkRange = Config.WALK_RANGE.get();
 
                 if (distSq <= walkRange * walkRange && old instanceof Mob mob) {
-                    wake(old);
+                    CompanionAdapters.wake(old);
                     freshenForSummon(mob);
                     mob.getNavigation().moveTo(player.getX(), player.getY(), player.getZ(), Config.WALK_SPEED.get());
                     playSummonFx(playerLevel, player.getX(), player.getY(), player.getZ(), false);
@@ -280,7 +279,7 @@ public final class BondService {
         if (found.isEmpty() && Config.REQUIRE_SPACE.get()) return SummonResult.NO_SPACE;
         Vec3 spawnPos = found.orElse(player.position());
 
-        wake(old);
+        CompanionAdapters.wake(old);
         if (old instanceof LivingEntity oldLiving) freshenForSummon(oldLiving);
         old.setYRot(player.getYRot());
         old.teleportTo(spawnPos.x, spawnPos.y, spawnPos.z);
@@ -316,7 +315,7 @@ public final class BondService {
             spawnPos = player.position();
         }
 
-        wake(old);
+        CompanionAdapters.wake(old);
 
         Vec3 destination = spawnPos;
         ITeleporter teleporter = new ITeleporter() {
@@ -408,7 +407,7 @@ public final class BondService {
             }
         }
 
-        wake(entity);
+        CompanionAdapters.wake(entity);
 
         entity.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
 
@@ -464,13 +463,6 @@ public final class BondService {
             level.sendParticles(ParticleTypes.POOF, x, y + 0.5D, z, 20, 0.3D, 0.3D, 0.3D, 0.05D);
         }
         level.playSound(null, x, y, z, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.NEUTRAL, 0.5F, 1.0F);
-    }
-
-    private static void wake(Entity entity) {
-        if (entity instanceof TamableAnimal tame) {
-            tame.setOrderedToSit(false);
-            tame.setInSittingPose(false);
-        }
     }
 
     private static void writeSummonTimestamp(ServerPlayer player, Bond bond) {
